@@ -23,92 +23,49 @@ Defining the command to run app using CMD which defines runtime. Here using 'nod
 Creating .dockerignore file to prevent some unwanted files from being copied onto Docker image.
 
 
+## Building image
 
-In method service.getUsdToUah() making GET request to https://www.floatrates.com/daily/uah.json, then reading data and
-parsing json to created struct service.Result. From parsed result getting USD to UAH currency exchange rate 
-(result.Usd.Rate) and returning this from method.
+In the directory that has recently created Dockerfile, running the following command to build the Docker image. The -t flag lets you tag your image so it's easier to find later using the docker images command:
 
-## Getting USD to BTC exchange rate
+*docker build . -t kotyuha-nazar/docker-node-lab1*
 
-Code to do this: pkg/service/currency.go
+## Run the image with memory and CPU limits
 
-In method service.getUsdToBTC() making GET request to https://blockchain.info/tobtc?currency=USD&value=1, then reading 
-data and converting to decimal.Decimal. After that, converted result returning from the method.
+We can set the resource limits directly using the docker run command. Running image with -d runs the container in detached mode, leaving the container running in the background. The -p flag redirects a public port to a private port inside the container. By default, access to the computing power of the host machine is unlimited. We can set the CPUs limit using the cpus parameter. Also we can set the memory limit using the -m parameter 
 
-## Getting BTC to UAH exchange rate
+Let's constrain our container to use at most two CPUs and, for instance, let's limit the memory that the container can use to 512 megabytes. 
 
-Code to do this: pkg/service/currency.go
+Running the image previously built:
 
-In method service.GetBtcToUah() getting USD to UAH exchange rate from method service.getUsdToUah() and USD to BTC 
-exchange rate from service.getUsdToBTC(). After that, calculating BTC to UAH exchange rate and returning result.
+*docker run --cpus=2 -m 512m -p 49160:80 -d kotyuha-nazar/docker-node-lab1*
 
-## Mailing 
+In the example above, Docker mapped the 80 port inside of the container to the port 49160 on machine.
 
-Code to do this: pkg/mail/mail.go
+So result will be discovered at http://localhost:49160/.
 
-In method checkAddress(string) e-mail address is being validated using method mail.validate() and is being checked if 
-this mail was already added to the file (pkg/mail/addresses.txt).
-In method mail.SendMail() using smtp.gmail.com e-mails is being sending to addresses stored in pkg/mail/addresses.txt.
+## Shut down the image 
 
-## Request 
+In order to shut down started app, running the kill command. This uses the container's ID, which will be got from:
 
-## /api/rate
+*docker ps*
 
-GET request with path "/api/rate" used to get current BTC to UAH exchange rate.
+in column CONTAINER ID
 
-![img.png](info/img1.png)
+Kill command 
 
-Request example:
-curl http://127.0.0.1:8000/api/rate --request "GET"
+*docker kill <CONTAINER ID>*
 
-## /api/subscription/subscribe
 
-POST request with path "/api/subscription/subscribe" used to add (if wasn't added before) e-mail address from formData 
-to file pkg/mail/addresses.txt to later send to these addresses e-mails with current BTC to UAH exchange rate.
+## Pushing to Docker.hub
 
-![img.png](info/img2.png)
+1. Creating a repository
+To create a repository, signed into Docker Hub, selected Repositories then Create Repository.
+2. Using docker login from the CLI, signed in using Docker ID
+*docker loging*
+3. Tagged image with created Docker ID using:
+*docker tag kotyuha-nazar/docker-node-lab1 nazarkotyuhaa/docker-node-lab1* 
+4. Pushed tagged private image to Docker ID namespace
+*docker push nazarkotyuhaa/docker-node-lab1*
 
-Trying to add the same address one more time:
-
-![img.png](info/img4.png)
-
-Request example:
-curl http://127.0.0.1:8000/api/subscription/subscribe \
---include \
---header "application/x-www-form-urlencoded" \
---request "POST" \
---data "email=<put e-mail address here>"
-
-## /api/subscription/sendEmails
-
-POST request with path "/api/subscription/subscribe" used to send e-mail with current BTC to UAH exchange rate to 
-addresses stored in file pkg/mail/addresses.txt.
-To show this request working will add some temporal mail addresses to file using /api/subscription/subscribe POST 
-request
-
-![img.png](info/img5.png)
-
-![img.png](info/img6.png)
-
-![img.png](info/img7.png)
-
-![img.png](info/img8.png)
-
-E-mail were sent to all stored addresses.
-
-Request example:
-curl http://127.0.0.1:8000/api/subscription/sendEmails --request "POST"
-
-## Docker
-
-Dockerfile added.
-
-Example:
-docker build -t golang-api .
-
-![img.png](info/img9.png)
-
-Working in docker:
-
-![img.png](info/img10.png)
-
+Result: 
+https://hub.docker.com/repository/docker/nazarkotyuhaa/docker-node-lab1/general
