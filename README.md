@@ -41,7 +41,7 @@ Running the image previously built:
 
 In the example above, Docker mapped the 80 port inside of the container to the port 80 on machine.
 
-So result will be discovered at http://localhost:49160/.
+So result will be discovered at http://localhost:80/.
 
 ## Shut down the image 
 
