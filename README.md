@@ -1,4 +1,4 @@
-# Dockerizing Note.js app
+# Dockerizing Node.js app
 
 ## Creating Dockerfile
 
