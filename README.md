@@ -2,9 +2,9 @@
 
 ## Creating Dockerfile
 
-1. FROM node:16
+1. FROM node:16 \
 Defining from what image we want to build from. Used the latest LTS version 16 of node available from the Docker Hub.
-2. WORKDIR /app
+2. WORKDIR /app \ 
 Creating a directory to hold the application code inside the image, this will be the working directory for application.
 3. COPY package*.json ./
 Installing app dependencies. A wildcard is used to ensure both package.json AND package-lock.json are copied.
