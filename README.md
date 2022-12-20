@@ -63,9 +63,9 @@ To create a repository, signed into Docker Hub, selected Repositories then Creat
 2. Using docker login from the CLI, signed in using Docker ID \
 *docker loging*
 3. Tagged image with created Docker ID using: \
-*docker tag kotyuha-nazar/docker-node-lab1 nazarkotyuhaa/docker-node-lab1* 
+*docker tag kotyuha-nazar/docker-node-lab1 nazarkotyuhaa/dockerlab-app* 
 4. Pushed tagged private image to Docker ID namespace \
-*docker push nazarkotyuhaa/docker-node-lab1*
+*docker push nazarkotyuhaa/dockerlab-app*
 
 Result: 
-https://hub.docker.com/repository/docker/nazarkotyuhaa/docker-node-lab1/general
+https://hub.docker.com/repository/docker/nazarkotyuhaa/dockerlab-app/general
